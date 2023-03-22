@@ -1,32 +1,34 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
 #include <mysql.h>
+#include <locale.h>
 
-int main() {
-    MYSQL *conn;
-    MYSQL_RES *res;
-    MYSQL_ROW row;
+MYSQL *__stdcall obterConexao()
+{
+    char *servidor = "127.0.0.1";
+    char *usuario = "root";
+    char *senha = "1234";
+    char *nomeBanco = "bancoSQL_C";
 
-    char *server = "localhost";
-    char *user = "root";
-    char *password = "1234";
-    char *database = "BancoTest";
+    MYSQL *conexao = mysql_init(NULL);
 
-    conn = mysql_init(NULL);
-
-    if (!mysql_real_connect(conn, server, user, password, NULL, 0, NULL, 0)) {
-        fprintf(stderr, "%s\n", mysql_error(conn));
-        return 1;
+    if (!mysql_real_connect(conexao, servidor, usuario, senha, nomeBanco, 0, NULL, 0))
+    {
+        fprintf(stderr, "\n%s\n", mysql_error(conexao));
+        mysql_close(conexao);
+        exit(1);
     }
-
-    char query[100];
-    sprintf(query, "CREATE DATABASE %s", database);
-
-    if (mysql_query(conn, query)) {
-        fprintf(stderr, "%s\n", mysql_error(conn));
-        return 1;
+    else
+    {
+        printf("\nConexão realizada com sucesso!\n");
+        return conexao;
     }
+}
 
-    mysql_close(conn);
-
+int main()
+{
+    setlocale(LC_ALL, "portuguese-brazilian");
+    MYSQL *conexao = obterConexao();
     return 0;
 }
