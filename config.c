@@ -29,7 +29,7 @@ MYSQL *__stdcall obterConexao()
     }
     else
     {
-        printf("\nConex„o realizada com sucesso!\n");
+        printf("\nConex√£o realizada com sucesso!\n");
         return conexao;
     }
 }
@@ -75,10 +75,18 @@ void ler(MYSQL *conexao)
     mysql_free_result(resultado);
 }
 
-void atualizar(MYSQL *conexao, char email)
+void atualizar(MYSQL *conexao)
 {
     char query[100];
-    sprintf(query, "UPDATE clientes SET email WHERE email", email);
+    char email[100];
+    char nome[100];
+    printf("email:\n");
+    fflush(stdin);
+    gets(email);
+    printf("nome:\n");
+    fflush(stdin);
+    gets(nome);
+    sprintf(query, "UPDATE clientes SET email = '%s' WHERE nome = '%s'", email, nome);
 
     if (mysql_query(conexao, query))
     {
@@ -90,10 +98,14 @@ void atualizar(MYSQL *conexao, char email)
     }
 }
 
-void apagar(MYSQL *conexao, char email)
+void apagar(MYSQL *conexao, char nome)
 {
     char query[100];
-    sprintf(query, "DELETE FROM clientes WHERE email = %s;", email);
+    char email[100];
+    printf("nome:\n");
+    fflush(stdin);
+    gets(email);
+    sprintf(query, "DELETE FROM clientes WHERE email = '%s'", email);
 
     if (mysql_query(conexao, query))
     {
