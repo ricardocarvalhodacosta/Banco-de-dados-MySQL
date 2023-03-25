@@ -50,7 +50,7 @@ int main()
         break;
 
     case '4':
-        apagar(conexao, 11);
+        apagar(conexao, email);
 
         printf("\n*** CLIENTES CADASTRADOS ***\n");
         ler(conexao);
