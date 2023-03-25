@@ -67,9 +67,9 @@ void ler(MYSQL *conexao)
 
     while ((row = mysql_fetch_row(resultado)) != NULL)
     {
-        printf("\nNome: %s\n", row[0]);
-        printf("Telefone: %s\n", row[1]);
-        printf("Email: %s\n", row[2]);
+        printf("\nEmail: %s\n", row[0]);
+        printf("Nome: %s\n", row[1]);
+        printf("Telefone: %s\n", row[2]);
     }
 
     mysql_free_result(resultado);
@@ -98,7 +98,7 @@ void atualizar(MYSQL *conexao)
     }
 }
 
-void apagar(MYSQL *conexao, char nome)
+void apagar(MYSQL *conexao)
 {
     char query[100];
     char email[100];
