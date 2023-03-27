@@ -38,55 +38,64 @@ void setup()
 {
     MYSQL *conexao = obterConexao();
     int i;
-    char *email[100];
-    char *nome[100];
-    char *telefone[100];
+    int numeroclientes;
+    char email[320];
+    char nome[50];
+    char telefone[20];
     char menu;
 
-    printf("Olá, o que você gostaria de fazer?\n");
-    printf("1. Adicionar novo usuário, 2. Ler os dados, 3. Alterar os dados, 4. Apagar dados;\n");
+    printf("Banco de Dados MySQL, digite a função desejada: \n");
+    printf("1. Adicionar novo usuário, 2. Ler os dados, 3. Alterar os dados, 4. Apagar dados, 5. Encerrar;\n");
     scanf("%c", &menu);
+    getchar();
 
     switch(menu)
     {
     case '1':
         printf("\n*** CADASTRO DE CLIENTES ***\n");
-        for (i = 0; i < 3; i++)
+        printf("Quantos clientes gostaria de adicionar?\n");
+        scanf("%d", &numeroclientes);
+        printf("\n");
+        while (getchar() != '\n');
+
+        for (i = 0; i < numeroclientes; i++)
         {
             printf("%d - Email: ", i);
-            fflush(stdin);
-            gets (email);
+            getchar();
+            fgets (email, 320, stdin);
+            email[strcspn(email, "\n")] = '\0';
             printf("%d - Nome: ", i);
-            fflush(stdin);
-            gets(nome);
+            getchar();
+            fgets(nome, 50, stdin);
+            nome[strcspn(nome, "\n")] = '\0';
             printf("%d - Telefone: ", i);
-            fflush(stdin);
-            gets(telefone);
+            getchar();
+            fgets(telefone, 20, stdin);
+            telefone[strcspn(telefone, "\n")] = '\0';
+            ;
             inserir(conexao, email, nome, telefone);
         }
         break;
 
     case '2':
-        printf("\n*** CLIENTES CADASTRADOS ***\n");
         ler(conexao);
         break;
 
     case '3':
         atualizar(conexao);
-        printf("\n*** CLIENTES CADASTRADOS ***\n");
         ler(conexao);
         break;
 
     case '4':
         apagar(conexao);
-
-        printf("\n*** CLIENTES CADASTRADOS ***\n");
         ler(conexao);
         break;
 
     default:
+        printf("\nObrigado e volte logo!\n");
         break;
     }
+
 }
 
 void inserir(MYSQL *conexao, char *email, char *nome, char *telefone)
@@ -133,44 +142,46 @@ void ler(MYSQL *conexao)
 void atualizar(MYSQL *conexao)
 {
     char query[100];
-    char *email[100];
-    char *nome[100];
-    char *novonome[100];
-    char *telefone[100];
+    char email[320];
+    char nome[50];
+    char novonome[50];
+    char telefone[20];
     int op;
 
     printf("Quais dados gostaria de alterar?\n");
     printf("1. E-mail, 2. Nome, 3 Telefone;\n");
     printf("Digite aqui: ");
     scanf("%d", &op);
+    getchar();
 
     switch(op)
     {
     case 1:
-        printf("Qual o nome do Cliente que gostaria de alterar dados?\n");
-        fflush(stdin);
-        gets(nome);
+        printf("Qual o NOME do Cliente que gostaria de alterar dados?\n");
+        getchar();
+        fgets(nome, 50, stdin);
         printf("Qual o novo E-MAIL?\n");
-        fflush(stdin);
-        gets(email);
+        getchar();
+        fgets(email, 320, stdin);
+        email[strcspn(email, "\n")] = '\0';
         sprintf(query, "UPDATE clientes SET email = '%s' WHERE nome = '%s'", email, nome);
         break;
     case 2:
-        printf("Qual o nome atual do Cliente que gostaria de alterar dados?\n");
-        fflush(stdin);
-        gets(nome);
+        printf("Qual o NOME atual do Cliente que gostaria de alterar dados?\n");
+        fgets(nome, 50, stdin);
+        getchar();
         printf("Qual o novo NOME?\n");
-        fflush(stdin);
-        gets(novonome);
+        fgets(novonome, 50, stdin);
+        novonome[strcspn(novonome, "\n")] = '\0';
         sprintf(query, "UPDATE clientes SET nome = '%s' WHERE nome = '%s'", novonome, nome);
         break;
     case 3:
-        printf("Qual o nome do Cliente que gostaria de alterar dados?\n");
-        fflush(stdin);
-        gets(nome);
+        printf("Qual o NOME do Cliente que gostaria de alterar dados?\n");
+        fgets(nome, 50, stdin);
         printf("Qual o novo TELEFONE?\n");
-        fflush(stdin);
-        gets(telefone);
+        getchar();
+        fgets(telefone, 20, stdin);
+        telefone[strcspn(telefone, "\n")] = '\0';
         sprintf(query, "UPDATE clientes SET telefone = '%s' WHERE nome = '%s'", telefone, nome);
         break;
     default:
@@ -190,11 +201,20 @@ void atualizar(MYSQL *conexao)
 void apagar(MYSQL *conexao)
 {
     char query[100];
-    char email[100];
-    printf("Qual o E-mail do cliente a ser apagado?\n");
-    fflush(stdin);
-    gets(email);
-    sprintf(query, "DELETE FROM clientes WHERE email = '%s'", email);
+    char email[320];
+    printf("Qual o E-MAIL do cliente a ser apagado?\n");
+    getchar();
+    scanf("%s", email);
+
+    char *token = strtok(email, "@");
+    char nome[100];
+    char dominio[100];
+    strcpy(nome, token);
+
+    token = strtok(NULL, "@");
+    strcpy(dominio, token);
+
+    sprintf(query, "DELETE FROM clientes WHERE email = '%s' AND nome = '%s' AND dominio = '%s'", email, nome, dominio);
 
     if (mysql_query(conexao, query))
     {
