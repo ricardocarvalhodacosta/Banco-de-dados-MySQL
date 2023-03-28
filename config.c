@@ -46,8 +46,7 @@ void setup()
 
     printf("Banco de Dados MySQL, digite a função desejada: \n");
     printf("1. Adicionar novo usuário, 2. Ler os dados, 3. Alterar os dados, 4. Apagar dados, 5. Encerrar;\n");
-    scanf("%c", &menu);
-    getchar();
+    scanf(" %c", &menu);
 
     switch(menu)
     {
@@ -55,21 +54,18 @@ void setup()
         printf("\n*** CADASTRO DE CLIENTES ***\n");
         printf("Quantos clientes gostaria de adicionar?\n");
         scanf("%d", &numeroclientes);
-        printf("\n");
         while (getchar() != '\n');
+        printf("\n");
 
         for (i = 0; i < numeroclientes; i++)
         {
             printf("%d - Email: ", i);
-            getchar();
             fgets (email, 320, stdin);
             email[strcspn(email, "\n")] = '\0';
             printf("%d - Nome: ", i);
-            getchar();
             fgets(nome, 50, stdin);
             nome[strcspn(nome, "\n")] = '\0';
             printf("%d - Telefone: ", i);
-            getchar();
             fgets(telefone, 20, stdin);
             telefone[strcspn(telefone, "\n")] = '\0';
             ;
