@@ -171,7 +171,7 @@ void atualizar(MYSQL *conexao)
     case 3:
         printf("Qual o NOME do Cliente que gostaria de alterar dados?\n");
         gets(nome);
-        printf("Qual o novo TELEFONE?\n");
+        printf("Qual o novo TELEFONE? \n");
         gets(telefone);
         telefone[strcspn(telefone, "\n")] = '\0';
         sprintf(query, "UPDATE clientes SET telefone = '%s' WHERE nome = '%s'", telefone, nome);
