@@ -154,29 +154,25 @@ void atualizar(MYSQL *conexao)
     {
     case 1:
         printf("Qual o NOME do Cliente que gostaria de alterar dados?\n");
-        getchar();
-        fgets(nome, 50, stdin);
+        gets(nome);
         printf("Qual o novo E-MAIL?\n");
-        getchar();
-        fgets(email, 320, stdin);
+        gets(email);
         email[strcspn(email, "\n")] = '\0';
         sprintf(query, "UPDATE clientes SET email = '%s' WHERE nome = '%s'", email, nome);
         break;
     case 2:
         printf("Qual o NOME atual do Cliente que gostaria de alterar dados?\n");
-        fgets(nome, 50, stdin);
-        getchar();
+        gets(nome);
         printf("Qual o novo NOME?\n");
-        fgets(novonome, 50, stdin);
+        gets(novonome);
         novonome[strcspn(novonome, "\n")] = '\0';
         sprintf(query, "UPDATE clientes SET nome = '%s' WHERE nome = '%s'", novonome, nome);
         break;
     case 3:
         printf("Qual o NOME do Cliente que gostaria de alterar dados?\n");
-        fgets(nome, 50, stdin);
+        gets(nome);
         printf("Qual o novo TELEFONE?\n");
-        getchar();
-        fgets(telefone, 20, stdin);
+        gets(telefone);
         telefone[strcspn(telefone, "\n")] = '\0';
         sprintf(query, "UPDATE clientes SET telefone = '%s' WHERE nome = '%s'", telefone, nome);
         break;
@@ -199,18 +195,9 @@ void apagar(MYSQL *conexao)
     char query[100];
     char email[320];
     printf("Qual o E-MAIL do cliente a ser apagado?\n");
-    getchar();
-    scanf("%s", email);
-
-    char *token = strtok(email, "@");
-    char nome[100];
-    char dominio[100];
-    strcpy(nome, token);
-
-    token = strtok(NULL, "@");
-    strcpy(dominio, token);
-
-    sprintf(query, "DELETE FROM clientes WHERE email = '%s' AND nome = '%s' AND dominio = '%s'", email, nome, dominio);
+    fflush(stdin);
+    gets(email);
+    sprintf(query, "DELETE FROM clientes WHERE email = '%s'", email);
 
     if (mysql_query(conexao, query))
     {
